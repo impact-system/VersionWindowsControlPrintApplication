@@ -1,0 +1,290 @@
+﻿@model IEnumerable<TrackWiseModel.Models.TrackWise>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>
+            Control Print Application
+        </title>
+        <style>
+            body {
+                font-family: Arial;
+                font-size: 10pt;
+            }
+
+            .error {
+                color: red;
+            }
+
+            .exception {
+                color: brown;
+            }
+
+            .div.dataTables_wrapper {
+                margin-bottom: 3em;
+            }
+
+            .center {
+                margin: auto;
+                width: 50%;
+                border: 3px solid green;
+                padding: 10px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <form class="form-inline">
+            <div>
+                <br><br>
+
+                @using (Ajax.BeginForm("Index", "Movie",
+                                                        new AjaxOptions
+                                                        {
+                                                            OnFailure = "searchFailed",
+                                                            HttpMethod = "GET",
+                                                            UpdateTargetId = "movieTable",
+
+                                                        }))
+                {
+
+                    <br>
+                    <div class="center">
+
+                        @Html.TextBox("txtInput", null, new { @class = "form-control input-group-sm", @id = "txtidInput" })
+                        <input type="submit" id="btnsearch" onclick="message()" name="Search" value="Search" class="btn btn-sm btn-primary" />
+                    </div>
+
+                }
+            </div>
+
+            <br>
+            <div>
+
+                <div class="display" style="@(@Model == null ? "display:none" : "display:block")" id="tblUserApp1">
+
+                    <label style="border:1px; font-size:x-large"></label>
+                    <table id="tblUserApp" class="display table-bordered table-responsive table-striped table-hover" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th style="visibility:visible" class="headerStyle">
+                                    <b> Id</b>
+                                </th>
+                                <th>
+                                    <b> PRNO</b>
+                                </th>
+                                @*<th>
+                                    <b> Header</b>
+                                </th>*@
+                                <th>
+                                    <b>PDFDocument</b>
+
+                                </th>
+                                @*<th>
+                                    <b>State Name</b>
+
+                                </th>*@
+                                <th>
+                                    <b>Create Date</b>
+                                </th>
+                                <th></th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @if (Model != null)
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td style="visibility:visible" class="UserId boxed_displayElementStyle">
+                                            <span>  @Html.DisplayFor(modelItem => item.SId)</span>
+                                        </td>
+                                        <td class="UserName ">
+                                            <span>  @Html.DisplayFor(modelItem => item.PRNO)</span>
+                                            <input type="text" value="@Html.DisplayFor(modelItem => item.PRNO)" id="PRNO" class="form-control input-sm" style="display:none ;width:100%" />
+                                        </td>
+
+                                        @*<td class="Password">
+                                               <span>  @Html.DisplayFor(modelItem => item.Header)</span>
+                                            <input type="text" value="@Html.DisplayFor(modelItem => item.Header)" id="Header" class="form-control input-sm" style="display:none;width:100%" />
+                                        </td>*@
+
+                                        <td class="FirstName">
+
+                                            <span>  @Html.DisplayFor(modelItem => item.PdfDocument)</span>
+                                            <input type="text" value="@Html.DisplayFor(modelItem => item.PdfDocument)" id="PdfDocument" class="form-control input-sm" style="display:none;width:100%" />
+                                        </td>
+
+                                        <td>
+                                            <iframe data-bind="attr: {src: ~document}">
+                                            </iframe>
+                                        </td>
+                                        @*<td class="LastName">
+                                            <span>  @Html.DisplayFor(modelItem => item.StateName)</span>
+                                            <input type="text" value="@Html.DisplayFor(modelItem => item.StateName)" id="StateName" class="form-control input-sm" style="display:none;width:100%" />
+                                        </td>*@
+
+                                        <td class="Email" style="width:auto">
+                                            <span>  @Html.DisplayFor(modelItem => item.CreateDate)</span>
+                                            <input type="text" value="@Html.DisplayFor(modelItem => item.CreateDate)" id="CreateDate" class="form-control input-sm" style="display:none;width:100%" />
+                                        </td>
+
+                                        <td class="document">
+
+                                            <a class="details" href="javascript:;">View Document</a>
+                                        </td>
+
+                                        @*<td>
+                                            <input type="button" id="Updating" class="Updating btn btn-sm btn-primary" value="Updating" />
+                                        </td>*@
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </body>
+
+
+    </html>
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+<script type="text/javascript" src="~/Scripts/jquery.min.js"></script>
+<script type="text/javascript" src="~/Scripts/toastr.js"></script>
+<script type="text/javascript" src="~/Scripts/ShowPopup.js"></script>
+<link type="" href="~/Content/toastr.css" rel="stylesheet" />
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script src="http://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+<script src="http://cdn.datatables.net/1.10.19/css/dataTables.jqueryui.min.css"></script>
+<link type="text/css" rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+
+<link href="~/Content/sweetalert2.min.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/sweetalert2.min.js"></script>
+@*<link rel="stylesheet" href='https://cdn.jsdelivr.net/sweetalert2/6.3.8/sweetalert2.css'
+    media="screen" />*@
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('a').click(function (e) {
+            e.preventDefault();
+            $('iframe').attr('src', "/HobbyHomes/Test");
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#example').DataTable();
+    });
+    $(document).ready(function () {
+        debugger;
+        $('table.display').DataTable({
+            "responsive": true,
+            "processing": true,
+            "bLengthChange": true,
+            "aLengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+            "fixedHeader": false,
+            "lengthChange": true,
+            "autoWidth": false,
+            "scrollY": 300,
+            "scrollX": true,
+            //"scrollY": "300px",
+            "scrollCollapse": true,
+
+            "sPaginationType": "full_numbers",
+        });
+        $("body").on("submit", "#movieTable", function () {
+            return confirm("Do you want to submit?");
+            if ($("#txtidInput").val() == "") {
+                ErrorPopup('Fill The Search Box');
+            }
+        });
+
+        //if()
+    });
+
+    function message() {
+        alert("THIS IS A MESSAGE!!!");
+    }
+</script>
+
+<script type="text/javascript">
+    $("body").on("click", "#tblUserApp .Updating", function () {
+        debugger;
+        var row = $(this).closest("tr");
+        var UId;
+        swal({
+            title: 'Are you sure?',
+            // text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Update it!',
+            cancelButtonText: 'No, cancel!',
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            buttonsStyling: false
+
+        }).then(function () {
+
+            $("td", row).each(function () {
+                UId = $.trim(row.find(".HID").find("span").html());
+
+                if ($(this).find("input").length > 0) {
+
+                    var span = $(this).find("span");
+                    var input = $(this).find("input");
+                    span.show();
+                    input.hide();
+                }
+
+                if ($(this).find("select").length > 0) {
+                    //debugger
+                    var span = $(this).find('span');
+                    var select = $(this).find("select");
+                    select.hide();
+                    span.show();
+                }
+            });
+            row.find(".Updating").show();
+            row.find(".Inserted").show();
+            row.find(".Edit").show();
+            row.find(".Delete").show();
+            row.find(".Cancel").hide();
+            var UserData = {};
+            UserData.HID = HID;
+            UserData.SId = SId;
+            UserData.Tid = Tid;
+            UserData.PRNO = row.find(".PRNO").find("span").html();
+            UserData.Header = row.find(".Header").find("span").html();
+            UserData.PdfDocument = row.find(".PdfDocument").find("span").html();
+            UserData.StateName = row.find(".StateName").find("span").html();
+            UserData.CreatedDate = row.find(".CreatedDate").find("span").html();
+            $.ajax({
+                type: "POST",
+                url: "/UserDetail/UpdateUnmatching206",
+                data: JSON.stringify(UserData),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (json) {
+
+                }
+            });
+            debugger;
+
+        });
+        return true;
+    });
+</script>
